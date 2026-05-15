@@ -659,11 +659,37 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'sharkstore-app-01';
+
+// =========================================================================
+// KONFIGURASI DATABASE FIREBASE (WAJIB DIISI JIKA DI-HOSTING DI TEMPAT LAIN)
+// =========================================================================
+let firebaseConfig;
+if (typeof __firebase_config !== 'undefined') {
+  // Berjalan secara otomatis di dalam platform Canvas ini
+  firebaseConfig = JSON.parse(__firebase_config);
+} else {
+  // ⚠️ GANTI NILAI DI BAWAH INI DENGAN KONFIGURASI DARI FIREBASE CONSOLE ANDA ⚠️
+  // Anda bisa mendapatkannya secara gratis dengan membuat project di firebase.google.com
+  firebaseConfig = {
+    apiKey: "AIzaSyB1PZot92j659z0wumBzfd6UPrgFNzdqJI",
+    authDomain: "sharkstoreid-e9c3d.firebaseapp.com",
+    projectId: "sharkstoreid-e9c3d",
+    storageBucket: "sharkstoreid-e9c3d.firebasestorage.app",
+    messagingSenderId: "1077276765745",
+    appId: "1:1077276765745:web:5dc8a6e6b1a5a712006f10",
+    measurementId: "G-1DZ6S4EN06"
+  };
+}
+
+let app, db, auth;
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+} catch(e) {
+  console.error("Gagal inisialisasi Firebase. Pastikan konfigurasi Anda benar.", e);
+}
 
 window.listings = [];
 window.uploadedPhotos = [];
@@ -691,6 +717,11 @@ function customDialog(msg, isPrompt, callback) {
 window.init = async function() {
   if(localStorage.getItem('ss_mono_admin') === 'true') { document.body.classList.add('admin-mode'); }
   
+  if (!auth || !db) {
+      window.showToast('Database tidak terhubung. Cek Firebase.', 'error');
+      return;
+  }
+
   // Firebase Authentication
   try {
       if (typeof __initial_auth_token !== 'undefined') {
@@ -713,7 +744,7 @@ window.init = async function() {
       });
   } catch(e) {
       console.error(e);
-      window.showToast('Koneksi sistem gagal', 'error');
+      window.showToast('Koneksi sistem gagal. Pastikan API key benar.', 'error');
   }
 }
 
