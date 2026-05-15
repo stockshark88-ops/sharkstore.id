@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SharkStore — Edisi Monokrom</title>
+<title>SharkStore — Edisi Monokrom (Multiplayer)</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -59,7 +59,7 @@ nav {
 }
 
 .nav-logo { display:flex; align-items:center; text-decoration: none; }
-.store-logo { max-height: 35px; object-fit: contain; } /* Ukuran Logo Gambar */
+.store-logo { max-height: 35px; object-fit: contain; } 
 
 .nav-center { display:flex;gap:2.5rem;list-style:none; }
 .nav-center a {
@@ -232,14 +232,13 @@ header::before {
 .acc-card:hover::before { transform:scaleX(1); }
 .acc-card:hover { transform:translateY(-5px);border-color:var(--border-medium); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
-/* MEMPERBAIKI KARTU TERJUAL AGAR TETAP BISA DIKLIK */
 .acc-card.sold { opacity:0.5; filter: grayscale(100%); }
 .acc-card.sold::after {
   content:'TERJUAL'; position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);
   font-family:'Orbitron',monospace;font-size:2.5rem;font-weight:900;
   color:var(--text-primary);border:4px solid var(--text-primary);padding:0.5rem 1.5rem;
   background: rgba(0,0,0,0.8); z-index:10;letter-spacing:0.1em;
-  pointer-events: none; /* Mencegah tulisan memblokir klik di bawahnya */
+  pointer-events: none; 
 }
 
 .card-img-wrap { position:relative;height:200px;overflow:hidden;background:var(--bg-elevated); }
@@ -344,7 +343,6 @@ footer {
 #toast.show { transform:translateX(-50%) translateY(0); }
 #toast.error { border-bottom: 2px solid var(--text-primary); }
 
-/* Sistem Mode Admin Otomatis */
 .admin-only { display: none !important; }
 body.admin-mode .admin-only { display: flex !important; }
 button.admin-only { display: none !important; }
@@ -357,6 +355,20 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
 <body>
 
 <div id="toast"></div>
+
+<!-- Custom Dialog Modal untuk menanggulangi pembatasan UI iframe -->
+<div class="modal-overlay" id="custom-dialog">
+  <div class="modal" style="max-width: 400px; text-align: center;">
+    <div class="modal-body">
+      <div id="dialog-msg" style="margin-bottom: 1.5rem; font-family:'Rajdhani',sans-serif; font-size:1.1rem;"></div>
+      <input type="password" id="dialog-input" class="form-input" style="display:none; margin-bottom: 1.5rem;" placeholder="Sandi Admin">
+      <div style="display:flex; gap: 1rem; justify-content: center;">
+        <button class="btn-ghost" id="dialog-cancel" style="padding: 0.5rem 1.5rem;">BATAL</button>
+        <button class="btn-primary" id="dialog-ok" style="padding: 0.5rem 1.5rem;">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="search-overlay" id="search-overlay">
   <span style="color:var(--text-muted);font-size:1.5rem;">CARI_</span>
@@ -477,7 +489,7 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
 <div style="max-width:1280px; margin:0 auto;">
   <div class="footer-bottom">
     <span>© 2026 SHARKSTORE MONOCHROME. Hak Cipta Dilindungi.</span>
-    <span>SISTEM V1.6</span>
+    <span>SISTEM V2.0 CLOUD</span>
   </div>
 </div>
 
@@ -492,7 +504,6 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
         Pilih saluran komunikasi yang ingin Anda tuju di bawah ini.
       </p>
       <div class="link-tree">
-        <!-- SVG WhatsApp -->
         <a href="https://wa.me/62882020566569" target="_blank" class="link-tree-item">
           <div class="lt-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></div>
           <div class="lt-text"><div class="lt-title">WhatsApp Japost</div><div class="lt-sub">Admin Utama</div></div>
@@ -501,12 +512,10 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
           <div class="lt-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></div>
           <div class="lt-text"><div class="lt-title">WhatsApp Rekber</div><div class="lt-sub">Admin Kedua</div></div>
         </a>
-        <!-- SVG Instagram -->
         <a href="https://instagram.com/sharkstore.mono" target="_blank" class="link-tree-item">
           <div class="lt-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
           <div class="lt-text"><div class="lt-title">Instagram</div><div class="lt-sub">@sharkstore.mono</div></div>
         </a>
-        <!-- SVG YouTube -->
         <a href="https://youtube.com/@SharkStoreOfficial" target="_blank" class="link-tree-item">
           <div class="lt-icon"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
           <div class="lt-text"><div class="lt-title">YouTube</div><div class="lt-sub">SharkStore Official</div></div>
@@ -567,7 +576,6 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
           <textarea class="form-textarea" id="f-desc" placeholder="Masukkan spesifikasi mentah, statistik, inventaris..." rows="4"></textarea>
         </div>
         
-        <!-- KOLOM TAUTAN VIDEO -->
         <div class="form-group">
           <label class="form-label">Tautan YouTube (Opsional)</label>
           <input type="url" class="form-input" id="f-yt" placeholder="https://youtube.com/..."/>
@@ -577,7 +585,6 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
           <input type="url" class="form-input" id="f-tt" placeholder="https://tiktok.com/..."/>
         </div>
 
-        <!-- KOLOM MASA AKTIF / AUTO-DELETE -->
         <div class="form-group full">
           <label class="form-label">Masa Aktif Iklan <span class="req">*</span></label>
           <select class="form-select" id="f-expiry">
@@ -625,10 +632,7 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
       
       <div style="font-size:0.95rem; color:var(--text-secondary); line-height:1.7; margin-bottom:1.5rem; white-space:pre-line;" id="dm-desc">---</div>
       
-      <!-- KONTAINER TAUTAN VIDEO DINAMIS -->
-      <div id="dm-video-links" style="display:none; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
-        <!-- Tombol akan diisi oleh JavaScript -->
-      </div>
+      <div id="dm-video-links" style="display:none; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;"></div>
 
       <div style="display:flex;align-items:center;gap:1rem;padding:1rem;border:1px solid var(--border-medium);margin-bottom:1.5rem;background:var(--bg-elevated);">
         <div style="width:45px;height:45px;background:var(--text-primary);color:var(--bg-base);display:flex;align-items:center;justify-content:center;font-family:'Orbitron';font-weight:700;" id="dm-avatar">?</div>
@@ -642,7 +646,6 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
         <a id="dm-wa" href="#" target="_blank" class="btn-block primary">INISIASI KONTAK (WA)</a>
       </div>
 
-      <!-- FITUR BARU: TOMBOL KONTROL MANUAL KHUSUS ADMIN DI DALAM MODAL -->
       <div class="action-buttons admin-only" id="dm-admin-actions" style="margin-top: 1rem; border-top: 1px dashed var(--border-medium); padding-top: 1rem;">
         <button id="dm-btn-sold" class="btn-block" style="border-color:var(--text-primary); color:var(--text-primary); cursor:pointer;">TANDAI TERJUAL</button>
         <button id="dm-btn-del" class="btn-block" style="border-color:#ff4444; color:#ff4444; cursor:pointer;">HAPUS MANUAL</button>
@@ -651,73 +654,118 @@ body.admin-mode button.admin-only { display: inline-flex !important; }
   </div>
 </div>
 
-<script>
-let listings = [];
-let uploadedPhotos = [];
-let currentFilter = 'all';
-let searchQuery = '';
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-function init() {
-  try { listings = JSON.parse(localStorage.getItem('ss_mono_listings') || '[]'); } 
-  catch(e) { listings = []; }
-  
-  // Fitur Auto Delete: Bersihkan akun yang kedaluwarsa sebelum dirender
-  cleanUpExpiredAccounts();
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-  if(localStorage.getItem('ss_mono_admin') === 'true') { document.body.classList.add('admin-mode'); }
-  renderCards();
+window.listings = [];
+window.uploadedPhotos = [];
+window.currentFilter = 'all';
+window.searchQuery = '';
+
+// Custom Prompt & Confirm UI Modals 
+function customDialog(msg, isPrompt, callback) {
+  const overlay = document.getElementById('custom-dialog');
+  const msgEl = document.getElementById('dialog-msg');
+  const inputEl = document.getElementById('dialog-input');
+  const okBtn = document.getElementById('dialog-ok');
+  const cancelBtn = document.getElementById('dialog-cancel');
+
+  msgEl.textContent = msg;
+  inputEl.style.display = isPrompt ? 'block' : 'none';
+  inputEl.value = '';
+  overlay.classList.add('open');
+
+  const cleanup = () => { overlay.classList.remove('open'); okBtn.onclick = null; cancelBtn.onclick = null; };
+  cancelBtn.onclick = () => { cleanup(); callback(null); };
+  okBtn.onclick = () => { cleanup(); callback(isPrompt ? inputEl.value : true); };
 }
 
-function cleanUpExpiredAccounts() {
-  const now = Date.now();
-  const originalLength = listings.length;
-  // Simpan hanya yang belum memiliki masa kadaluwarsa (permanen == 0) atau waktunya masih di atas waktu saat ini
-  listings = listings.filter(acc => !acc.expiryTimestamp || acc.expiryTimestamp === 0 || acc.expiryTimestamp > now);
+window.init = async function() {
+  if(localStorage.getItem('ss_mono_admin') === 'true') { document.body.classList.add('admin-mode'); }
   
-  if (listings.length !== originalLength) {
-    localStorage.setItem('ss_mono_listings', JSON.stringify(listings));
-    console.log(`[Sistem] Menghapus otomatis ${originalLength - listings.length} iklan yang kedaluwarsa.`);
+  // Firebase Authentication
+  try {
+      if (typeof __initial_auth_token !== 'undefined') {
+          await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+          await signInAnonymously(auth);
+      }
+      
+      const listingsRef = collection(db, 'artifacts', appId, 'public', 'data', 'listings');
+      onSnapshot(listingsRef, (snapshot) => {
+          window.listings = [];
+          snapshot.forEach(docSnap => {
+              window.listings.push(docSnap.data());
+          });
+          cleanUpExpiredAccounts();
+          window.renderCards();
+      }, (error) => {
+          console.error("Firebase Error:", error);
+          window.showToast('Gagal memuat data dari server', 'error');
+      });
+  } catch(e) {
+      console.error(e);
+      window.showToast('Koneksi sistem gagal', 'error');
   }
 }
 
-function toggleAdmin() {
+window.cleanUpExpiredAccounts = function() {
+  const now = Date.now();
+  window.listings.forEach(acc => {
+      if (acc.expiryTimestamp && acc.expiryTimestamp !== 0 && acc.expiryTimestamp <= now) {
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'listings', acc.id.toString());
+          deleteDoc(docRef); 
+          console.log(`[Sistem] Menghapus otomatis iklan kedaluwarsa.`);
+      }
+  });
+}
+
+window.toggleAdmin = function() {
   if(document.body.classList.contains('admin-mode')) {
     document.body.classList.remove('admin-mode');
     localStorage.removeItem('ss_mono_admin');
-    showToast('Mode Admin Dinonaktifkan', 'error');
+    window.showToast('Mode Admin Dinonaktifkan', 'error');
   } else {
-    const pass = prompt('Masukkan Kode Sandi Admin:');
-    if(pass === 'admin123') { // Anda bisa mengganti sandi disini
-      document.body.classList.add('admin-mode');
-      localStorage.setItem('ss_mono_admin', 'true');
-      showToast('Akses Admin Diberikan');
-    } else if (pass) { showToast('Sandi Salah!', 'error'); }
+    customDialog('Masukkan Kode Sandi Admin:', true, (pass) => {
+      if(pass === 'admin123') {
+        document.body.classList.add('admin-mode');
+        localStorage.setItem('ss_mono_admin', 'true');
+        window.showToast('Akses Admin Diberikan');
+      } else if (pass) { window.showToast('Sandi Salah!', 'error'); }
+    });
   }
 }
 
-function showToast(msg, type = 'success') {
+window.showToast = function(msg, type = 'success') {
   const t = document.getElementById('toast');
   t.innerHTML = `<span>${type==='error'?'[!]':'[✓]'}</span> <span>${msg.toUpperCase()}</span>`;
   t.className = `show ${type}`;
   setTimeout(() => t.className = '', 3000);
 }
 
-function toggleMobile() { document.getElementById('mobile-menu').classList.toggle('open'); }
-function closeMobile() { document.getElementById('mobile-menu').classList.remove('open'); }
-function openSearch() { document.getElementById('search-overlay').classList.add('open'); document.getElementById('search-overlay-input').focus(); }
-function closeSearch() { document.getElementById('search-overlay').classList.remove('open'); document.getElementById('search-overlay-input').value = ''; searchQuery = ''; renderCards(); }
-function handleInlineSearch(val) { searchQuery = val.toLowerCase(); renderCards(); }
-function setFilter(game, btn) { currentFilter = game; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderCards(); }
-function openContactModal() { document.getElementById('contact-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeContactModal() { document.getElementById('contact-modal').classList.remove('open'); document.body.style.overflow = ''; }
-function openAddModal() { document.getElementById('add-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeAddModal() { document.getElementById('add-modal').classList.remove('open'); document.body.style.overflow = ''; }
+window.toggleMobile = function() { document.getElementById('mobile-menu').classList.toggle('open'); }
+window.closeMobile = function() { document.getElementById('mobile-menu').classList.remove('open'); }
+window.openSearch = function() { document.getElementById('search-overlay').classList.add('open'); document.getElementById('search-overlay-input').focus(); }
+window.closeSearch = function() { document.getElementById('search-overlay').classList.remove('open'); document.getElementById('search-overlay-input').value = ''; window.searchQuery = ''; window.renderCards(); }
+window.handleInlineSearch = function(val) { window.searchQuery = val.toLowerCase(); window.renderCards(); }
+window.setFilter = function(game, btn) { window.currentFilter = game; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); window.renderCards(); }
+window.openContactModal = function() { document.getElementById('contact-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+window.closeContactModal = function() { document.getElementById('contact-modal').classList.remove('open'); document.body.style.overflow = ''; }
+window.openAddModal = function() { document.getElementById('add-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+window.closeAddModal = function() { document.getElementById('add-modal').classList.remove('open'); document.body.style.overflow = ''; }
+window.formatWA = function(input) { input.value = input.value.replace(/\D/g, ''); }
 
-function formatWA(input) { input.value = input.value.replace(/\D/g, ''); }
-
-async function handlePhotos(input) {
+window.handlePhotos = async function(input) {
   const files = Array.from(input.files);
-  const remaining = 5 - uploadedPhotos.length;
+  const remaining = 5 - window.uploadedPhotos.length;
   if (remaining <= 0) return;
   const toLoad = files.slice(0, remaining);
   for (let f of toLoad) {
@@ -734,62 +782,72 @@ async function handlePhotos(input) {
           }
           cvs.width = w; cvs.height = h;
           cvs.getContext('2d').drawImage(img, 0, 0, w, h);
-          uploadedPhotos.push(cvs.toDataURL('image/jpeg', 0.8));
+          window.uploadedPhotos.push(cvs.toDataURL('image/jpeg', 0.8));
           res();
         }; img.src = e.target.result;
       }; r.readAsDataURL(f);
     });
   }
-  input.value = ''; document.getElementById('img-previews').innerHTML = uploadedPhotos.map((src, i) => `<div class="preview-thumb"><img src="${src}"/><div style="position:absolute;top:0;right:0;background:#000;color:#fff;cursor:pointer;padding:2px 6px;" onclick="uploadedPhotos.splice(${i},1);this.parentElement.remove()">✕</div></div>`).join('');
+  input.value = ''; 
+  document.getElementById('img-previews').innerHTML = window.uploadedPhotos.map((src, i) => `<div class="preview-thumb"><img src="${src}"/><div style="position:absolute;top:0;right:0;background:#000;color:#fff;cursor:pointer;padding:2px 6px;" onclick="window.uploadedPhotos.splice(${i},1);this.parentElement.remove()">✕</div></div>`).join('');
 }
 
-function submitAccount() {
+window.submitAccount = async function() {
   const seller = document.getElementById('f-seller').value.trim();
   const wa = document.getElementById('f-wa').value.trim();
   const game = document.getElementById('f-game').value;
   const price = document.getElementById('f-price').value;
   const title = document.getElementById('f-title').value.trim();
   
-  // Ambil Tautan Video dan Masa Aktif
   const ytLink = document.getElementById('f-yt').value.trim();
   const ttLink = document.getElementById('f-tt').value.trim();
   const expiryDays = parseInt(document.getElementById('f-expiry').value);
 
-  if (!seller || !wa || !game || !price || !title) return showToast('Isi form yang wajib', 'error');
-  if (uploadedPhotos.length === 0) return showToast('Gambar diperlukan', 'error');
+  if (!seller || !wa || !game || !price || !title) return window.showToast('Isi form yang wajib', 'error');
+  if (window.uploadedPhotos.length === 0) return window.showToast('Gambar diperlukan', 'error');
 
-  // Kalkulasi Timestamp Kedaluwarsa
   const expiryTimestamp = expiryDays === 0 ? 0 : Date.now() + (expiryDays * 24 * 60 * 60 * 1000);
+  const accId = Date.now();
 
   const acc = {
-    id: Date.now(), seller, wa, game, price: parseInt(price), title,
+    id: accId, seller, wa, game, price: parseInt(price), title,
     desc: document.getElementById('f-desc').value.trim(),
     nego: document.getElementById('f-nego').checked,
-    photos: [...uploadedPhotos], sold: false, createdAt: Date.now(),
-    ytLink, ttLink, expiryTimestamp // <- Properti baru untuk tautan dan batas waktu
+    photos: [...window.uploadedPhotos], sold: false, createdAt: Date.now(),
+    ytLink, ttLink, expiryTimestamp 
   };
 
-  listings.unshift(acc);
-  localStorage.setItem('ss_mono_listings', JSON.stringify(listings));
-  renderCards(); 
-  
-  // Bersihkan form
-  uploadedPhotos = [];
-  document.getElementById('img-previews').innerHTML = '';
-  document.getElementById('f-yt').value = '';
-  document.getElementById('f-tt').value = '';
-  document.getElementById('f-expiry').value = '7';
-  
-  closeAddModal(); 
-  showToast('Iklan berhasil dipasang');
+  try {
+    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'listings', accId.toString());
+    await setDoc(docRef, acc);
+
+    window.uploadedPhotos = [];
+    document.getElementById('img-previews').innerHTML = '';
+    document.getElementById('f-seller').value = '';
+    document.getElementById('f-wa').value = '';
+    document.getElementById('f-game').value = '';
+    document.getElementById('f-price').value = '';
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-yt').value = '';
+    document.getElementById('f-tt').value = '';
+    document.getElementById('f-expiry').value = '7';
+    document.getElementById('f-nego').checked = false;
+    
+    window.closeAddModal(); 
+    window.showToast('Iklan berhasil dipasang di server');
+  } catch(e) {
+    console.error(e);
+    window.showToast('Gagal mengunggah ke server', 'error');
+  }
 }
 
-function renderCards() {
+window.renderCards = function() {
   const grid = document.getElementById('listings-grid');
-  let list = [...listings];
+  let list = [...window.listings];
   
-  if (currentFilter !== 'all') list = list.filter(l => l.game === currentFilter);
-  if (searchQuery) list = list.filter(l => (l.title+l.game+l.desc).toLowerCase().includes(searchQuery));
+  if (window.currentFilter !== 'all') list = list.filter(l => l.game === window.currentFilter);
+  if (window.searchQuery) list = list.filter(l => (l.title+l.game+l.desc).toLowerCase().includes(window.searchQuery));
   
   const sort = document.getElementById('sort-select').value;
   if (sort === 'newest') list.sort((a,b) => b.createdAt - a.createdAt);
@@ -803,9 +861,8 @@ function renderCards() {
 
   grid.innerHTML = list.map(acc => {
     const pStr = new Intl.NumberFormat('id-ID').format(acc.price);
-    const imgHtml = acc.photos[0] ? `<img class="card-img" src="${acc.photos[0]}" loading="lazy"/>` : '';
+    const imgHtml = acc.photos && acc.photos[0] ? `<img class="card-img" src="${acc.photos[0]}" loading="lazy"/>` : '';
     
-    // Tanda waktu kedaluwarsa visual
     let expiryHtml = '';
     if(acc.expiryTimestamp && acc.expiryTimestamp > 0) {
       const daysLeft = Math.max(1, Math.ceil((acc.expiryTimestamp - Date.now()) / (1000 * 60 * 60 * 24)));
@@ -813,7 +870,7 @@ function renderCards() {
     }
 
     return `
-    <div class="acc-card ${acc.sold?'sold':''}" onclick="openDetail(${acc.id})">
+    <div class="acc-card ${acc.sold?'sold':''}" onclick="window.openDetail(${acc.id})">
       <div class="card-img-wrap">${imgHtml}</div>
       <div class="card-body">
         <div class="card-game"><span>${acc.game}</span> ${expiryHtml}</div>
@@ -821,8 +878,8 @@ function renderCards() {
         <div class="card-footer">
           <div class="card-price">IDR ${pStr} ${acc.nego?'<span class="price-neg">NEGO</span>':''}</div>
           <div style="display:flex;gap:0.5rem;">
-            <button class="icon-btn admin-only" onclick="event.stopPropagation();deleteAccount(${acc.id})" title="Hapus">✕</button>
-            <button class="icon-btn admin-only" onclick="event.stopPropagation();toggleSold(${acc.id})" title="Terjual">${acc.sold?'⟲':'✓'}</button>
+            <button class="icon-btn admin-only" onclick="event.stopPropagation();window.deleteAccount(${acc.id})" title="Hapus">✕</button>
+            <button class="icon-btn admin-only" onclick="event.stopPropagation();window.toggleSold(${acc.id})" title="Terjual">${acc.sold?'⟲':'✓'}</button>
             <button class="btn-detail">LIHAT</button>
           </div>
         </div>
@@ -831,30 +888,40 @@ function renderCards() {
   }).join('');
 }
 
-function toggleSold(id) {
-  const acc = listings.find(l => l.id === id);
+window.toggleSold = async function(id) {
+  const acc = window.listings.find(l => l.id === id);
   if(acc) { 
-    acc.sold = !acc.sold; 
-    localStorage.setItem('ss_mono_listings', JSON.stringify(listings)); 
-    renderCards(); 
-    
-    // Update teks tombol jika aksi dilakukan dari dalam modal
-    const btnSold = document.getElementById('dm-btn-sold');
-    if(btnSold) btnSold.textContent = acc.sold ? 'BATAL TERJUAL' : 'TANDAI TERJUAL';
-  }
-}
-function deleteAccount(id) {
-  if(confirm('Hapus akun ini secara manual dan permanen?')) {
-    listings = listings.filter(l => l.id !== id);
-    localStorage.setItem('ss_mono_listings', JSON.stringify(listings)); 
-    renderCards(); 
-    closeDetailModal(); // Otomatis menutup modal detail jika dihapus dari sana
-    showToast('Iklan Dihapus');
+    try {
+      const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'listings', acc.id.toString());
+      await updateDoc(docRef, { sold: !acc.sold });
+      
+      const btnSold = document.getElementById('dm-btn-sold');
+      if(btnSold) btnSold.textContent = !acc.sold ? 'BATAL TERJUAL' : 'TANDAI TERJUAL';
+    } catch(e) {
+      console.error(e);
+      window.showToast('Gagal update data server', 'error');
+    }
   }
 }
 
-function openDetail(id) {
-  const acc = listings.find(l => l.id === id);
+window.deleteAccount = function(id) {
+  customDialog('Hapus akun ini secara permanen dari server global?', false, async (confirm) => {
+    if(confirm) {
+      try {
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'listings', id.toString());
+        await deleteDoc(docRef);
+        window.closeDetailModal();
+        window.showToast('Iklan Dihapus');
+      } catch(e) {
+        console.error(e);
+        window.showToast('Gagal menghapus', 'error');
+      }
+    }
+  });
+}
+
+window.openDetail = function(id) {
+  const acc = window.listings.find(l => l.id === id);
   if (!acc) return;
   document.getElementById('dm-price').textContent = 'IDR ' + new Intl.NumberFormat('id-ID').format(acc.price);
   document.getElementById('dm-nego').style.display = acc.nego ? 'block' : 'none';
@@ -865,12 +932,10 @@ function openDetail(id) {
   document.getElementById('dm-seller').textContent = acc.seller;
   document.getElementById('dm-avatar').textContent = acc.seller[0].toUpperCase();
   
-  // Render Galeri
   const gal = document.getElementById('dm-gallery');
   if(!acc.photos || !acc.photos.length) { gal.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:var(--border-medium);">TIDAK ADA FOTO</div>`; } 
   else { gal.innerHTML = `<img src="${acc.photos[0]}" class="active"/>`; }
 
-  // Render Tombol Tautan Video
   const vidContainer = document.getElementById('dm-video-links');
   let vidHtml = '';
   if (acc.ytLink) {
@@ -892,26 +957,25 @@ function openDetail(id) {
     vidContainer.innerHTML = '';
   }
 
-  // Setel link WhatsApp
   let waNum = acc.wa.startsWith('0') ? '62'+acc.wa.slice(1) : acc.wa;
   document.getElementById('dm-wa').href = `https://wa.me/${waNum}?text=RE: ${encodeURIComponent(acc.title)} - IDR ${acc.price}`;
   
-  // Setel fungsi tombol kontrol manual Admin
   const btnSold = document.getElementById('dm-btn-sold');
   const btnDel = document.getElementById('dm-btn-del');
   if (btnSold) {
     btnSold.textContent = acc.sold ? 'BATAL TERJUAL' : 'TANDAI TERJUAL';
-    btnSold.onclick = () => toggleSold(acc.id);
+    btnSold.onclick = () => window.toggleSold(acc.id);
   }
   if (btnDel) {
-    btnDel.onclick = () => deleteAccount(acc.id);
+    btnDel.onclick = () => window.deleteAccount(acc.id);
   }
 
   document.getElementById('detail-modal').classList.add('open'); document.body.style.overflow = 'hidden';
 }
-function closeDetailModal() { document.getElementById('detail-modal').classList.remove('open'); document.body.style.overflow = ''; }
 
-window.onload = init;
+window.closeDetailModal = function() { document.getElementById('detail-modal').classList.remove('open'); document.body.style.overflow = ''; }
+
+window.onload = window.init;
 </script>
 </body>
 </html>
